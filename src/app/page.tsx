@@ -1,101 +1,180 @@
+"use client";
+
+import React, { useState, useEffect, useCallback } from "react";
 import Image from "next/image";
+import Link from "next/link"; // Import Link from next/link
+import debounce from "lodash.debounce";
 
-export default function Home() {
+interface Movie {
+  id: number;
+  title: string;
+  poster_path: string;
+  release_date: string;
+  vote_average: number;
+}
+
+const Home: React.FC = () => {
+  const [movies, setMovies] = useState<Movie[]>([]);
+  const [page, setPage] = useState(1);
+  const [loading, setLoading] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
+
+  const fetchMovies = async (pageNumber: number, search: string = "") => {
+    setLoading(true);
+    const API_KEY = process.env.NEXT_PUBLIC_TMDB_API_KEY;
+  
+    const endpoint = search
+      ? `https://api.themoviedb.org/3/search/movie?api_key=${API_KEY}&query=${search}&page=${pageNumber}`
+      : `https://api.themoviedb.org/3/trending/all/day?api_key=${API_KEY}&language=en-US&page=${pageNumber}`;
+  
+    try {
+      const response = await fetch(endpoint);
+      const data = await response.json();
+  
+      if (pageNumber === 1) {
+        setMovies(data.results || []); // Ensure we set an empty array if no results
+      } else {
+        setMovies((prev) => [...prev, ...(data.results || [])]); // Safely append results
+      }
+    } catch (error) {
+      console.error("Error fetching movies:", error);
+    } finally {
+      setLoading(false);
+    }  
+  };
+
+  const handleSearch = useCallback(
+    debounce((value: string) => {
+      setPage(1);
+      fetchMovies(1, value);
+    }, 500),
+    []
+  );
+
+  const handleScroll = useCallback(
+    debounce(() => {
+      if (
+        window.innerHeight + document.documentElement.scrollTop >=
+        document.documentElement.offsetHeight - 200
+      ) {
+        setPage((prev) => prev + 1);
+      }
+    }, 200),
+    []
+  );
+
+  useEffect(() => {
+    fetchMovies(page, searchTerm);
+  }, [page, searchTerm]);
+
+  useEffect(() => {
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [handleScroll]);
+
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
-
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+    <div className="bg-gray-900 min-h-screen font-sans text-white">
+      {/* Navbar */}
+      <nav className="bg-black-900 shadow-lg">
+        <div className="container mx-auto flex justify-between items-center px-6 py-4">
+          <div className="flex items-center space-x-6">
+            <span className="text-2xl font-extrabold text-white-400">MovieNest</span>
+          </div>
+          <ul className="flex space-x-8 text-lg">
+            <li>
+              <Link
+                href="/"
+                className="hover:text-yellow-400 transition duration-300"
+              >
+                Home
+              </Link>
+            </li>
+            <li>
+              <Link
+                href="/favorites"
+                className="hover:text-yellow-400 transition duration-300"
+              >
+                Favorites
+              </Link>
+            </li>
+            <li>
+              <Link
+                href="/about"
+                className="hover:text-yellow-400 transition duration-300"
+              >
+                About
+              </Link>
+            </li>
+          </ul>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+      </nav>
+
+      {/* Search Bar */}
+      <div className="container mx-auto px-6 py-8">
+        <input
+          type="text"
+          placeholder="Search movies..."
+          className="w-full p-4 rounded-md border-2 border-white-400 bg-gray-800 text-white placeholder-white-500 focus:outline-none focus:ring-2 focus:ring-yellow-400"
+          value={searchTerm}
+          onChange={(e) => {
+            setSearchTerm(e.target.value);
+            handleSearch(e.target.value);
+          }}
+        />
+      </div>
+
+      {/* Movie Grid */}
+      <div className="container mx-auto px-6 py-6 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
+        {movies.length > 0 ? (
+          movies.map((movie) => (
+            <div
+              key={movie.id}
+              className="bg-gray-800 rounded-lg overflow-hidden transform transition-all hover:scale-105 hover:shadow-2xl"
+            >
+              <Image
+                src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
+                alt={movie.title}
+                width={500}
+                height={750}
+                className="object-cover w-full h-80"
+              />
+              <div className="p-4">
+                <h2 className="text-lg font-semibold text-white truncate">{movie.title}</h2>
+                <p className="text-sm text-gray-400">
+                  Release Date: {movie.release_date}
+                </p>
+                <p className="text-sm text-yellow-400">
+                  Rating: {movie.vote_average.toFixed(1)}
+                </p>
+              </div>
+            </div>
+          ))
+        ) : (
+          <p className="col-span-full text-center text-gray-500">No movies found.</p>
+        )}
+      </div>
+
+      {/* Skeleton Loader */}
+      {loading && (
+        <div className="container mx-auto px-6 py-6 black grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
+          {Array(10)
+            .fill(null)
+            .map((_, idx) => (
+              <div
+                key={idx}
+                className="bg-black-800 rounded-lg shadow-md animate-pulse"
+              >
+                <div className="h-80 bg-gray-700"></div>
+                <div className="p-4">
+                  <div className="h-6 bg-gray-700 rounded mb-2"></div>
+                  <div className="h-4 bg-gray-700 rounded"></div>
+                </div>
+              </div>
+            ))}
+        </div>
+      )}
     </div>
   );
-}
+};
+
+export default Home;
