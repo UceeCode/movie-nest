@@ -131,22 +131,25 @@ const Home: React.FC = () => {
               key={movie.id}
               className="bg-gray-800 rounded-lg overflow-hidden transform transition-all hover:scale-105 hover:shadow-2xl"
             >
-              <Image
-                src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
-                alt={movie.title}
-                width={500}
-                height={750}
-                className="object-cover w-full h-80"
-              />
-              <div className="p-4">
-                <h2 className="text-lg font-semibold text-white truncate">{movie.title}</h2>
-                <p className="text-sm text-gray-400">
-                  Release Date: {movie.release_date}
-                </p>
-                <p className="text-sm text-yellow-400">
-                  Rating: {movie.vote_average.toFixed(1)}
-                </p>
-              </div>
+               {/* Link to Movie Details */}
+               <Link href={`/movie/${movie.id}`}>
+                  <Image
+                    src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
+                    alt={movie.title}
+                    width={500}
+                    height={750}
+                    className="object-cover w-full h-80"
+                  />
+                  <div className="p-4">
+                    <h2 className="text-lg font-semibold text-white truncate">{movie.title}</h2>
+                    <p className="text-sm text-gray-400">
+                      Release Date: {movie.release_date}
+                    </p>
+                    <p className="text-sm text-yellow-400">
+                      Rating: {movie.vote_average.toFixed(1)}
+                    </p>
+                  </div>
+              </Link>
             </div>
           ))
         ) : (
