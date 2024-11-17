@@ -73,7 +73,7 @@ const Home: React.FC = () => {
   }, [handleScroll]);
 
   return (
-    <div className="bg-gray-900 min-h-screen font-sans text-white">
+    <div className="bg-black min-h-screen font-sans text-white">
       {/* Navbar */}
       <nav className="bg-black-900 shadow-lg">
         <div className="container mx-auto flex justify-between items-center px-6 py-4">
@@ -84,7 +84,7 @@ const Home: React.FC = () => {
             <li>
               <Link
                 href="/"
-                className="hover:text-yellow-400 transition duration-300"
+                className="hover:text-red-400 transition duration-300"
               >
                 Home
               </Link>
@@ -92,7 +92,7 @@ const Home: React.FC = () => {
             <li>
               <Link
                 href="/favorites"
-                className="hover:text-yellow-400 transition duration-300"
+                className="hover:text-red-400 transition duration-300"
               >
                 Favorites
               </Link>
@@ -100,7 +100,7 @@ const Home: React.FC = () => {
             <li>
               <Link
                 href="/about"
-                className="hover:text-yellow-400 transition duration-300"
+                className="hover:text-red-400 transition duration-300"
               >
                 About
               </Link>
@@ -114,7 +114,7 @@ const Home: React.FC = () => {
         <input
           type="text"
           placeholder="Search movies..."
-          className="w-full p-4 rounded-md border-2 border-white-400 bg-gray-800 text-white placeholder-white-500 focus:outline-none focus:ring-2 focus:ring-yellow-400"
+          className="w-full p-4 rounded-md border-2 border-white-400 bg-gray-800 text-white placeholder-white-500 focus:outline-none focus:ring-2 focus:ring-red-400"
           value={searchTerm}
           onChange={(e) => {
             setSearchTerm(e.target.value);
