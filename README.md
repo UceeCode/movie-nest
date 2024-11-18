@@ -43,54 +43,77 @@ npm run dev
 
 #### Open your browser and navigate to http://localhost:3000 to view the application.
 
-Running the Application
+## Running the Application
 Once the application is running, you can navigate through the following sections:
 
-Home: Displays trending movies and a search bar to search for movies.
-Favorites: Displays your favorite movies stored in local storage.
-About: Provides information about the app.
+1. **Home**: Displays trending movies and a search bar to search for movies.
+2. **Favorites**: Displays your favorite movies stored in local storage.
+3. **About**: Provides information about the app.
 
 The application will persist your favorite movies across sessions using localStorage.
 
-Code Structure
+## Code Structure
+
 The code is structured to promote maintainability and scalability, with the following key components:
 
-pages: Contains all the Next.js route components (home, about, favorite).
-components: Contains reusable UI components like Navbar, MovieCard, SearchBar, and FavoriteButton.
-utils: Contains utility functions like debounced search, fetching movies, and managing localStorage.
-styles: Contains the global styles and component-specific styles (using Tailwind CSS).
+1. **pages**: Contains all the Next.js route components (home, about, favorite).
+2. **components**: Contains reusable UI components like Navbar, MovieCard, SearchBar, and FavoriteButton.
+3. **utils**: Contains utility functions like debounced search, fetching movies, and managing localStorage.
+4. **styles**: Contains the global styles and component-specific styles (using Tailwind CSS).
 
-Design Decisions
-1. State Management with React Hooks:
-We use React's built-in hooks (useState, useEffect, useCallback) to manage state and side effects. This approach avoids the need for external state management libraries like Redux, keeping the app lightweight and simple.
+## Design Decisions
 
-State: Each feature (e.g., movies, favorites, searchTerm) is managed separately using useState.
-Side Effects: The app fetches movie data and interacts with localStorage using useEffect.
+1. **State Management with React Hooks**:
+   We use React's built-in hooks (`useState`, `useEffect`, `useCallback`) to manage state and side effects. This approach avoids the need for external state management libraries like Redux, keeping the app lightweight and simple.
 
-2. localStorage for Favorites:
-To persist the user's favorite movies across sessions, we use the browser's localStorage. This choice simplifies the implementation without requiring backend storage. The trade-off is that localStorage has a limited storage capacity (5MB), which may not be suitable for larger-scale applications.
+   - **State**: Each feature (e.g., movies, favorites, searchTerm) is managed separately using `useState`.
+   - **Side Effects**: The app fetches movie data and interacts with localStorage using `useEffect`.
 
-3. Debounced Search:
-A debounced search is implemented using lodash.debounce to avoid sending requests to the TMDb API for each keystroke. This reduces the number of API calls and improves performance.
+2. **localStorage for Favorites**:
+   To persist the user's favorite movies across sessions, we use the browser's `localStorage`. This choice simplifies the implementation without requiring backend storage. The trade-off is that `localStorage` has a limited storage capacity (5MB), which may not be suitable for larger-scale applications.
 
-Trade-off: While debouncing improves performance, it introduces a small delay in user experience, which may feel less responsive, but this is an acceptable trade-off to prevent excessive API calls.
+3. **Debounced Search**:
+   A debounced search is implemented using `lodash.debounce` to avoid sending requests to the TMDb API for each keystroke. This reduces the number of API calls and improves performance.
 
-4. API Fetching and Caching:
-The app fetches data from The Movie Database (TMDb) API. We load trending movies by default and support movie search functionality. Each search or page scroll fetches new data, and the results are appended to the current list. We ensure the movie data is cached in localStorage for the current session.
+   - **Trade-off**: While debouncing improves performance, it introduces a small delay in user experience, which may feel less responsive. However, this is an acceptable trade-off to prevent excessive API calls.
 
-Trade-off: Fetching new data every time may cause a slight delay when scrolling. This could be improved with better caching strategies or pagination.
+4. **API Fetching and Caching**:
+   The app fetches data from The Movie Database (TMDb) API. We load trending movies by default and support movie search functionality. Each search or page scroll fetches new data, and the results are appended to the current list. We ensure the movie data is cached in `localStorage` for the current session.
 
-5. Responsive Design:
-The layout is fully responsive and adjusts for various screen sizes using Tailwind CSS's utility-first classes. This ensures that the application looks good on all devices, from mobile phones to large desktop screens.
+   - **Trade-off**: Fetching new data every time may cause a slight delay when scrolling. This could be improved with better caching strategies or pagination.
+
+5. **Responsive Design**:
+   The layout is fully responsive and adjusts for various screen sizes using Tailwind CSS's utility-first classes. This ensures that the application looks good on all devices, from mobile phones to large desktop screens.
 
 
-Contributing
-We welcome contributions to MovieNest! If you'd like to contribute:
+## Contributing
 
-Fork the repository
-Create a new branch (git checkout -b feature-name)
-Commit your changes (git commit -m 'Add feature-name')
-Push to your branch (git push origin feature-name)
-Open a pull request
+We welcome contributions to MovieNest! If you'd like to contribute, please follow these steps:
+
+1. **Fork the repository**:  
+   Click the "Fork" button at the top right of this page to create a copy of the repository in your GitHub account.
+
+2. **Clone your fork**:  
+   Clone your forked repository to your local machine:
+   ```bash
+   git clone https://github.com/your-username/movienest.git
+   cd movienest
+
+3. **Create a new branch**
+```bash
+    git checkout -b feature-name
+```
+
+4. **Commit your changes**
+```bash
+git commit -m 'Add feature-name'
+```
+
+5. **Push your changes**
+```bash
+git push origin feature-name
+```
+
+6. **Open a pull request**
 
 
