@@ -16,33 +16,32 @@ MovieNest is a movie browsing and favorites management application. It fetches t
 ---
 
 ## Installation
-
 ### Clone the repository:
 ```bash
 git clone https://github.com/your-username/movienest.git
 cd movienest
 ```
 
-### Install dependencies:
-## Make sure you have npm or yarn installed. Then run:
+## Install dependencies:
+### Make sure you have npm or yarn installed. Then run:
 ```bash
 npm install
 ```
 
-### Environment variables:
-## Create a .env.local file in the root of your project and add your TMDb API key:
+## Environment variables:
+### Create a .env.local file in the root of your project and add your TMDb API key:
 ```bash
 NEXT_PUBLIC_TMDB_API_KEY=your-api-key-here
 ```
 
-### Start the development server:
-## Run the following command to start the development server:
+## Start the development server:
+### Run the following command to start the development server:
 ```bash
 npm run dev
 ```
 
 
-# Open your browser and navigate to http://localhost:3000 to view the application.
+#### Open your browser and navigate to http://localhost:3000 to view the application.
 
 Running the Application
 Once the application is running, you can navigate through the following sections:
