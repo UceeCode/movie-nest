@@ -89,7 +89,7 @@ const MovieDetails: React.FC = () => {
             </li>
             <li>
               <Link
-                href="/favorites"
+                href="/favorite"
                 className="hover:text-red-400 transition duration-300"
               >
                 Favorites
